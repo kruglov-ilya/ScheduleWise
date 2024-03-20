@@ -40,17 +40,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
-    #[ORM\Column(length: 6)]
-    private ?string $emailVerifyCode = null;
-
     #[ORM\Column]
-    private ?bool $isVerify = null;
-
-    #[ORM\Column]
-    private ?bool $isBlocked = null;
+    private ?bool $isBlocked = false;
 
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'client', orphanRemoval: true)]
     private Collection $bookings;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
 
     public function __construct()
     {
@@ -161,30 +158,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getEmailVerifyCode(): ?string
-    {
-        return $this->emailVerifyCode;
-    }
-
-    public function setEmailVerifyCode(string $emailVerifyCode): static
-    {
-        $this->emailVerifyCode = $emailVerifyCode;
-
-        return $this;
-    }
-
-    public function isIsVerify(): ?bool
-    {
-        return $this->isVerify;
-    }
-
-    public function setIsVerify(bool $isVerify): static
-    {
-        $this->isVerify = $isVerify;
-
-        return $this;
-    }
-
     public function isIsBlocked(): ?bool
     {
         return $this->isBlocked;
@@ -223,6 +196,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $booking->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }
