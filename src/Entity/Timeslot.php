@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TimeslotRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -34,6 +35,11 @@ class Timeslot
     {
         $this->allowedServices = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->start->format(DateTimeInterface::ATOM);
     }
 
     public function getId(): ?int

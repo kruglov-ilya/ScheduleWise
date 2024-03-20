@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Booking;
 use App\Entity\Service;
 use App\Entity\ServiceCategory;
 use App\Entity\Timeslot;
@@ -47,6 +48,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Услуги', 'fas fa-list', Service::class);
         yield MenuItem::linkToCrud('Категории услуг', 'fas fa-list', ServiceCategory::class);
         yield MenuItem::linkToCrud('Доступное время', 'fas fa-list', Timeslot::class);
+        yield MenuItem::linkToCrud('Записи на услуги', 'fas fa-list', Booking::class);
         // Добавьте дополнительные пункты меню для других сущностей
     }
 }

@@ -22,9 +22,9 @@ class ServiceCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
-        yield TextField::new('name');
-        yield TextAreaField::new('description');
-        yield MoneyField::new('price')->setCurrency('RUB');
-        yield AssociationField::new('category');
+        yield TextField::new('name', 'Название');
+        yield TextAreaField::new('description', 'Описание');
+        yield MoneyField::new('price', '')->setCurrency('RUB');
+        yield AssociationField::new('category', 'Категория');
     }
 }
