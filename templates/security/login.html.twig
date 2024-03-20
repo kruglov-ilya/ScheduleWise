@@ -3,40 +3,38 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
 
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+
+    <div class="flex justify-center items-center min-h-screen bg-white">
+        <div class="w-[380px]">
+            <div class="text-3xl mb-3 font-semibold flex flex-row items-center gap-5">
+                <div>Авторизация</div>
             </div>
-        {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+            {% for message in app.flashes('error') %}
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-blue-400"
+                     role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
 
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
+            {{ form_errors(loginForm) }}
 
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
+            {{ form_start(loginForm) }}
+            {{ form_row(loginForm._username) }}
+            {{ form_row(loginForm._password) }}
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
-            </div>
-        #}
+            <button type="submit" class="py-1.5 px-2 bg-[#0BC5EA] w-full rounded-md mt-3 text-white">Отправить</button>
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
+
+            <p class="text-center font-medium mt-3">У вас ещё нет аккаунта? <a class="text-[#0BC5EA]" href="{{ path('app_register') }}"> Зарегистрироваться</a></p>
+            {{ form_end(loginForm) }}
+        </div>
+    </div>
 {% endblock %}

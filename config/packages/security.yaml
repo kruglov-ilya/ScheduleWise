@@ -20,6 +20,8 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                username_parameter: 'login_form[_username]'
+                password_parameter: 'login_form[_password]'
             logout:
                 path: app_logout
                 # where to redirect after logout
