@@ -7,20 +7,30 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
 
-    <h1>Регистрация</h1>
 
-    {{ form_errors(registrationForm) }}
+    <div class="flex justify-center items-center min-h-screen bg-white">
+        <div class="w-[380px]">
+            <h1 class="text-center text-3xl mb-3 font-semibold">Регистрация</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.name) }}
+            {% for message in app.flashes('error') %}
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
 
-        {{ form_row(registrationForm.phone) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        })
-    }}
+            {{ form_errors(registrationForm) }}
 
-    <button type="submit" class="btn">Отправить</button>
-    {{ form_end(registrationForm) }}
+            {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.name) }}
+
+            {{ form_row(registrationForm.phone) }}
+            {{ form_row(registrationForm.plainPassword, {
+                label: 'Password'
+            }) }}
+
+            <button type="submit" class="py-1.5 px-2 bg-[#0BC5EA] w-full rounded-md  text-white">Отправить</button>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
 {% endblock %}

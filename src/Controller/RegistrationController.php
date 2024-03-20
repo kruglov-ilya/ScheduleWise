@@ -20,7 +20,9 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    public function __construct(private readonly EmailVerifier $emailVerifier, private readonly Security $security)
+    public function __construct(private readonly EmailVerifier $emailVerifier,
+                                private readonly Security $security,
+                                private readonly UserRepository $userRepository)
     {
     }
 
@@ -32,6 +34,13 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($this->userRepository->findOneBy(['email' => $user->getEmail()]) != null) {
+                $this->addFlash('error', 'Аккаунт с таким E-mail уже был зарегистрирован');
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form,
+                ]);
+            }
+
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
