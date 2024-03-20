@@ -27,7 +27,7 @@
             {{ form_row(loginForm._username) }}
             {{ form_row(loginForm._password) }}
 
-            <button type="submit" class="py-1.5 px-2 bg-[#0BC5EA] w-full rounded-md mt-3 text-white">Отправить</button>
+            <button type="submit" class="py-1.5 px-2 bg-[#0BC5EA] w-full rounded-md mt-3 text-white">Войти</button>
 
             <input type="hidden" name="_csrf_token"
                    value="{{ csrf_token('authenticate') }}"
