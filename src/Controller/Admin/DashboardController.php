@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Service;
+use App\Entity\ServiceCategory;
+use App\Entity\Timeslot;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -42,7 +44,9 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linktoDashboard('Панель управления', 'fa fa-home');
+        yield MenuItem::linkToCrud('Услуги', 'fas fa-list', Service::class);
+        yield MenuItem::linkToCrud('Категории услуг', 'fas fa-list', ServiceCategory::class);
+        yield MenuItem::linkToCrud('Доступное время', 'fas fa-list', Timeslot::class);
         // Добавьте дополнительные пункты меню для других сущностей
     }
 }

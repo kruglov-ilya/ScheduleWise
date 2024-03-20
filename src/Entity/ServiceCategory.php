@@ -43,7 +43,7 @@ class ServiceCategory
     /**
      * @var Collection<Service>
      */
-    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'category', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'category', cascade: ["persist"], orphanRemoval: true)]
     #[ApiProperty(writable: false)]
     #[Groups(['service_category:write', 'service_category:item'])]
     private Collection $services;
@@ -51,6 +51,11 @@ class ServiceCategory
     public function __construct()
     {
         $this->services = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
