@@ -39,13 +39,19 @@
                 Отправить
             </button>
             {{ form_end(bookingForm) }}
-            <div class="font-medium mt-4">
+            <div class="font-medium mt-4 flex flex-col gap-5">
                 {% if not isAuth %}
                     <a class="text-[#0BC5EA]" href="{{ path('app_login') }}">Войди в
                         аккаунт</a> и контактные данные будут подставлены автоматически
                 {% else %}
-                    Созданные записи можно посмотреть на странице
-                    <a class="text-[#0BC5EA]" href="{{ path('app_booking_list') }}">мои записи</a>
+                    <p>
+                        Созданные записи можно посмотреть на странице
+                        <a class="text-[#0BC5EA]" href="{{ path('app_booking_list') }}">мои записи</a>
+                    </p>
+                    <p>
+                        Информацию профиля можно отредактировать по
+                        <a class="text-[#0BC5EA]" href="{{ path('app_profile') }}">этой ссылке</a>
+                    </p>
                 {% endif %}
             </div>
         </div>
