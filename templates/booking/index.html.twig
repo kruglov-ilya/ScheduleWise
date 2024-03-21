@@ -39,11 +39,19 @@
                 Отправить
             </button>
             {{ form_end(bookingForm) }}
-            <div class="font-medium mt-4"><a class="text-[#0BC5EA]" href="{{ path('app_login') }}">Войди в аккаунт</a> и контактные данные будут подставлены автоматически</div>
+            <div class="font-medium mt-4">
+                {% if not isAuth %}
+                    <a class="text-[#0BC5EA]" href="{{ path('app_login') }}">Войди в
+                        аккаунт</a> и контактные данные будут подставлены автоматически
+                {% else %}
+                    Созданные записи можно посмотреть на странице
+                    <a class="text-[#0BC5EA]" href="{{ path('app_booking_list') }}">мои записи</a>
+                {% endif %}
+            </div>
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const serviceCategorySelect = document.getElementById('booking_form_serviceCategory');
             const serviceSelect = document.getElementById('booking_form_service');
             const bookingTimeSelect = document.getElementById('booking_form_timeslot');
@@ -62,7 +70,7 @@
                         serviceSelect.innerHTML = '';
                         serviceSelect.disabled = data.length === 0;
 
-                        data.forEach(function(service) {
+                        data.forEach(function (service) {
                             const option = new Option(service.name, service.id);
                             serviceSelect.appendChild(option);
                         });
@@ -87,7 +95,7 @@
                         bookingTimeSelect.innerHTML = '';
                         bookingTimeSelect.disabled = data.length === 0;
 
-                        data.forEach(function(bookingTime) {
+                        data.forEach(function (bookingTime) {
                             const option = new Option(bookingTime.time, bookingTime.id);
                             bookingTimeSelect.appendChild(option);
                         });
@@ -109,12 +117,12 @@
             }
 
             // Обработчик изменения категории услуги
-            serviceCategorySelect.addEventListener('change', function(e) {
+            serviceCategorySelect.addEventListener('change', function (e) {
                 updateServices(e.target.value);
             });
 
             // Обработчик изменения услуги
-            serviceSelect.addEventListener('change', function(e) {
+            serviceSelect.addEventListener('change', function (e) {
                 updateBookingTimes(e.target.value);
                 updatePrice(e.target.value);
             });

@@ -44,6 +44,7 @@ class BookingController extends AbstractController
 
         return $this->render('booking/index.html.twig', [
             'bookingForm' => $form,
+            'isAuth' => $security->isGranted('IS_AUTHENTICATED_REMEMBERED')
         ]);
     }
 }
