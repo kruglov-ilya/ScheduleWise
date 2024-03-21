@@ -1,28 +1,22 @@
 <?php
+
 namespace App\EventSubscriber;
 
-use App\Controller\Admin\BookingCrudController;
-use App\Entity\Booking;
-use App\Repository\BookingRepository;
+use App\Controller\Admin\TimeslotCrudController;
+use App\Entity\Timeslot;
+use App\Repository\TimeslotRepository;
 use CalendarBundle\CalendarEvents;
 use CalendarBundle\Entity\Event;
 use CalendarBundle\Event\CalendarEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class CalendarSubscriber implements EventSubscriberInterface
+readonly class CalendarSubscriber implements EventSubscriberInterface
 {
-    private BookingRepository $bookingRepository;
-    private UrlGeneratorInterface $router;
-
     public function __construct(
-        BookingRepository     $bookingRepository,
-        UrlGeneratorInterface $router
-    )
-    {
-        $this->bookingRepository = $bookingRepository;
-        $this->router = $router;
-    }
+        private TimeslotRepository    $timeslotRepository,
+        private UrlGeneratorInterface $router
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -40,47 +34,39 @@ class CalendarSubscriber implements EventSubscriberInterface
         // Modify the query to fit to your entity and needs
         // Change booking.beginAt by your start date property
         /**
-         * @var Booking[] $bookings
+         * @var Timeslot[] $timeslots
          */
-        $bookings = $this->bookingRepository
-            ->createQueryBuilder('booking')
-            ->join('booking.timeslot', 'timeslot')
+        $timeslots = $this->timeslotRepository
+            ->createQueryBuilder('timeslot')
             ->where('timeslot.start BETWEEN :start and :end')
             ->setParameter('start', $start->format('Y-m-d H:i:s'))
             ->setParameter('end', $end->format('Y-m-d H:i:s'))
             ->getQuery()
             ->getResult();
 
-        foreach ($bookings as $booking) {
+        foreach ($timeslots as $timeslot) {
             // this create the events with your data (here booking data) to fill calendar
-            $bookingEvent = new Event(
-                $booking->getService()->getName(),
-                $booking->getTimeslot()->getStart(),
-                $booking->getTimeslot()->getStart()->add(\DateInterval::createFromDateString('60 minutes')) // If the end date is null or not defined, a all day event is created.
+            $event = new Event(
+                '',
+                $timeslot->getStart(),
+                $timeslot->getStart()->add(\DateInterval::createFromDateString('60 minutes')) // If the end date is null or not defined, a all day event is created.
             );
 
-            /*
-             * Add custom options to events
-             *
-             * For more information see: https://fullcalendar.io/docs/event-object
-             * and: https://github.com/fullcalendar/fullcalendar/blob/master/src/core/options.ts
-             */
-
-            $bookingEvent->setOptions([
+            $event->setOptions([
                 'backgroundColor' => 'red',
                 'borderColor' => 'red',
             ]);
-            $bookingEvent->addOption(
+            $event->addOption(
                 'url',
                 $this->router->generate('admin_dashboard', [
-                    'entityId' => $booking->getId(),
+                    'entityId' => $timeslot->getId(),
                     'crudAction' => 'edit',
-                    'crudControllerFqcn' => BookingCrudController::class,
+                    'crudControllerFqcn' => TimeslotCrudController::class,
                 ])
             );
 
             // finally, add the event to the CalendarEvent to fill the calendar
-            $calendar->addEvent($bookingEvent);
+            $calendar->addEvent($event);
         }
     }
 }
