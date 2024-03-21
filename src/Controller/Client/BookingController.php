@@ -21,6 +21,14 @@ class BookingController extends AbstractController
     public function index(Request $request, BookingRepository $repository, EntityManagerInterface $entityManager, Security $security): Response
     {
         $booking = new Booking();
+        /**
+         * @var User $user
+         */
+        if ($user = $security->getUser()) {
+            $booking->setClientName($user->getName());
+            $booking->setClientPhone($user->getPhone());
+        }
+
         $form = $this->createForm(BookingFormType::class, $booking);
         $form->handleRequest($request);
 
@@ -41,6 +49,7 @@ class BookingController extends AbstractController
                 $this->addFlash('error', 'Запись на указанное время невозможна');
             }
         }
+
 
         return $this->render('booking/index.html.twig', [
             'bookingForm' => $form,
