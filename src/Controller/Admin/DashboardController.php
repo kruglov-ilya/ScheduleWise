@@ -45,10 +45,10 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToCrud('Услуги', 'fas fa-list', Service::class);
-        yield MenuItem::linkToCrud('Категории услуг', 'fas fa-list', ServiceCategory::class);
-        yield MenuItem::linkToCrud('Доступное время', 'fas fa-list', Timeslot::class);
-        yield MenuItem::linkToCrud('Записи на услуги', 'fas fa-list', Booking::class);
+        yield MenuItem::linkToCrud('Услуги', 'fas fa-tools', Service::class);
+        yield MenuItem::linkToCrud('Категории услуг', 'fas fa-tags', ServiceCategory::class);
+        yield MenuItem::linkToCrud('Доступное время', 'fas fa-clock', Timeslot::class);
+        yield MenuItem::linkToCrud('Записи на услуги', 'fas fa-calendar-alt', Booking::class);
         // Добавьте дополнительные пункты меню для других сущностей
     }
 }
