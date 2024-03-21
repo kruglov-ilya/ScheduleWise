@@ -31,7 +31,6 @@ class BookingFormType extends AbstractType
             ->add('timeslot', EntityType::class, [
                 'class' => Timeslot::class,
                 'choice_label' => 'time',
-                'mapped' => false,
             ])
             ->add('clientName')
             ->add('clientPhone')

@@ -3,6 +3,8 @@
 namespace App\Controller\Client;
 
 use App\Entity\Booking;
+use App\Entity\Service;
+use App\Entity\Timeslot;
 use App\Form\BookingFormType;
 use App\Repository\BookingRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,7 +23,8 @@ class BookingController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($booking->getTimeslot()->getCount() - 1 >= $repository->count(['timeslot' => $booking->getTimeslot()])){
+            if ($entityManager->find(Timeslot::class, $form->get('timeslot')->getData())->getCount() - 1 >= $repository->count(['timeslot' => $booking->getTimeslot()])){
+                $booking->setPrice($entityManager->find(Service::class, $form->get('service')->getData())->getPrice());
                 $entityManager->persist($booking);
                 $entityManager->flush();
 
