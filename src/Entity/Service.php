@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\API\ServiceByCategoryController;
 use App\Repository\ServiceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,7 +19,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(normalizationContext: ['groups' => 'service:item']),
         new GetCollection(normalizationContext: ['groups' => 'service:list']),
         new Post(denormalizationContext: ['groups' => 'service:write']),
-        new Put(denormalizationContext: ['groups' => 'service:write'])
+        new Put(denormalizationContext: ['groups' => 'service:write']),
+        new GetCollection(
+            uriTemplate: '/services/category/{id}',
+            controller: ServiceByCategoryController::class
+        )
     ],
     paginationEnabled: false,
 )]

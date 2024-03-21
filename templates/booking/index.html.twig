@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello BookingController!{% endblock %}
+
+{% block body %}
+    <div class="flex justify-center items-center min-h-screen bg-white">
+        <div class="w-[380px]">
+            <div class="text-3xl mb-3 font-semibold flex flex-row items-center gap-5">
+                <div>Записаться на услугу</div>
+            </div>
+
+            {% for message in app.flashes('error') %}
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-blue-400"
+                     role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {{ form_errors(bookingForm) }}
+
+            {{ form_start(bookingForm) }}
+            {{ form_row(bookingForm.serviceCategory) }}
+            {{ form_row(bookingForm.service) }}
+
+            {{ form_row(bookingForm.timeslot) }}
+
+            {{ form_row(bookingForm.clientName) }}
+            {{ form_row(bookingForm.clientPhone) }}
+
+            {{ form_row(bookingForm.price) }}
+
+            <button type="submit" class="py-1.5 px-2 bg-[#0BC5EA] w-full rounded-md mt-3 text-white">
+                Отправить
+            </button>
+            {{ form_end(bookingForm) }}
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const serviceCategorySelect = document.getElementById('booking_form_serviceCategory');
+            const serviceSelect = document.getElementById('booking_form_service');
+            const bookingTimeSelect = document.getElementById('booking_form_timeslot');
+
+            // Функция для обновления селектора услуг
+            function updateServices(categoryId) {
+                if (!categoryId) {
+                    serviceSelect.innerHTML = '';
+                    serviceSelect.disabled = true;
+                    return;
+                }
+
+                fetch(`/api/services/category/${categoryId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        serviceSelect.innerHTML = '';
+                        serviceSelect.disabled = data.length === 0;
+
+                        data.forEach(function(service) {
+                            const option = new Option(service.name, service.id);
+                            serviceSelect.appendChild(option);
+                        });
+
+                        // Вызываем изменение в селекторе услуг, чтобы обновить времена бронирования
+                        serviceSelect.dispatchEvent(new Event('change'));
+                    });
+
+            }
+
+            // Функция для обновления селектора времени бронирования
+            function updateBookingTimes(serviceId) {
+                if (!serviceId) {
+                    bookingTimeSelect.innerHTML = '';
+                    bookingTimeSelect.disabled = true;
+                    return;
+                }
+
+                fetch(`/api/timeslot/service/${serviceId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        bookingTimeSelect.innerHTML = '';
+                        bookingTimeSelect.disabled = data.length === 0;
+
+                        data.forEach(function(bookingTime) {
+                            const option = new Option(bookingTime.time, bookingTime.id);
+                            bookingTimeSelect.appendChild(option);
+                        });
+                    });
+            }
+
+            function updatePrice(serviceId) {
+                const priceDisplayEl = document.getElementById('booking_form_price')
+
+                if (!serviceId) {
+                    priceDisplayEl.value = ''
+                    return
+                }
+                fetch(`/api/services/${serviceId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        priceDisplayEl.value = `${data.price}`;
+                    });
+            }
+
+            // Обработчик изменения категории услуги
+            serviceCategorySelect.addEventListener('change', function(e) {
+                updateServices(e.target.value);
+            });
+
+            // Обработчик изменения услуги
+            serviceSelect.addEventListener('change', function(e) {
+                updateBookingTimes(e.target.value);
+                updatePrice(e.target.value);
+            });
+
+            // Инициализируем начальное состояние
+            serviceSelect.disabled = !serviceCategorySelect.value;
+            bookingTimeSelect.disabled = !serviceSelect.value;
+
+            if (serviceCategorySelect.value) {
+                updateServices(serviceCategorySelect.value);
+            }
+        });
+    </script>
+{% endblock %}
+

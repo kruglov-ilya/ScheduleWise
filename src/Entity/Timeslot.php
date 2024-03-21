@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use App\Controller\API\TimeslotByServiceController;
 use App\Repository\TimeslotRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +13,15 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TimeslotRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/timeslot/service/{id}',
+            controller: TimeslotByServiceController::class
+        )
+    ],
+    paginationEnabled: false,
+)]
 class Timeslot
 {
     #[ORM\Id]
@@ -40,6 +50,11 @@ class Timeslot
     public function __toString()
     {
         return $this->start->format(DateTimeInterface::ATOM);
+    }
+
+    public function getTime()
+    {
+        return $this->start->format('Y-m-d H:i:s');
     }
 
     public function getId(): ?int

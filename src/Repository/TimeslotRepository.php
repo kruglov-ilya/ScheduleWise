@@ -45,4 +45,14 @@ class TimeslotRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findTimesForService(int $serviceId)
+    {
+        return $this->createQueryBuilder('bt')
+            ->join('bt.allowedServices', 's')
+            ->where('s.id = :serviceId')
+            ->setParameter('serviceId', $serviceId)
+            ->getQuery()
+            ->getResult();
+    }
 }
