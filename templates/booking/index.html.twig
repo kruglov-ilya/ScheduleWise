@@ -9,8 +9,14 @@
                 <div>Записаться на услугу</div>
             </div>
 
+            {% for message in app.flashes('info') %}
+                <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50"
+                     role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
             {% for message in app.flashes('error') %}
-                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-blue-400"
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50"
                      role="alert">
                     {{ message }}
                 </div>

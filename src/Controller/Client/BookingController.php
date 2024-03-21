@@ -27,9 +27,10 @@ class BookingController extends AbstractController
                 $booking->setPrice($entityManager->find(Service::class, $form->get('service')->getData())->getPrice());
                 $entityManager->persist($booking);
                 $entityManager->flush();
-
+                $this->addFlash('info', 'Бронирование успешно проведено!');
+            } else {
+                $this->addFlash('error', 'Запись на указанное время невозможна');
             }
-
         }
 
         return $this->render('booking/index.html.twig', [
