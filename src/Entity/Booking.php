@@ -38,6 +38,9 @@ class Booking
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
+    #[ORM\Column]
+    private ?bool $isCanceled = false;
+
     public function __toString()
     {
         return $this->service->getName() . ' - ' . $this->timeslot->getStart()->format(DateTimeInterface::ATOM);
@@ -116,6 +119,18 @@ class Booking
     public function setPrice(string $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function isCanceled(): ?bool
+    {
+        return $this->isCanceled;
+    }
+
+    public function setIsCanceled(bool $isCanceled): static
+    {
+        $this->isCanceled = $isCanceled;
 
         return $this;
     }

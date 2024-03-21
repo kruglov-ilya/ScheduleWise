@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Booking;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
@@ -29,5 +30,6 @@ class BookingCrudController extends AbstractCrudController
         yield TextField::new('clientName', 'Имя клиента');
         yield TextField::new('clientPhone', 'Телефонный номер клиента');
         yield NumberField::new('price', 'Стоимость услуги')->setNumDecimals(2);
+        yield BooleanField::new('isCanceled', 'Отменена?');
     }
 }

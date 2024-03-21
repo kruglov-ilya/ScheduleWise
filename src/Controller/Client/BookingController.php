@@ -25,7 +25,7 @@ class BookingController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($entityManager->find(Timeslot::class, $form->get('timeslot')->getData())->getCount() - 1 >= $repository->count(['timeslot' => $booking->getTimeslot()])){
+            if ($entityManager->find(Timeslot::class, $form->get('timeslot')->getData())->getCount() - 1 >= $repository->count(['timeslot' => $booking->getTimeslot(), 'isCanceled' => false])){
                 /**
                  * @var User $user
                  */
